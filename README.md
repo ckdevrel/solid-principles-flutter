@@ -210,39 +210,32 @@ class RadioButtonWidget implements ClickListener {
 ## I — The Interface Segregation Principle (ISP):
 
 ### Bad
-```kotlin
-fun main() {
-    val adapter = Adapter()
-    adapter(object: Adapter.OnClickListener {
-        override fun onItemClick(position: Int) {
-            // Yes, I have received a callback, go to the next activity.
-            println("Clicked position is $position")
-        }
-        override fun onRadioButtonClick(position: Int) {
-            // This is no longer needed for this activity, but still I have been implemented for no use...
-        }
+```dart
+ void main()  {
+    var adapter = new ListItemWidget();
+    adapter.click();
+ }
+       
 
-    })
-    adapter.execute()
+class ListItemWidget implements OnClickListener {
+
+   void click () {}
+  
+   @override 
+   void onItemClick(position: Int) {
+        // Yes, I have received a callback, go to the next activity.
+        print("Clicked position is $position");
+   }
+   @override 
+   void onRadioButtonClick(position: Int) {
+        // This is no longer needed for this activity, but still I have been implemented for no use...
+   }
 }
 
-class Adapter {
-
-    private var onClickListener: OnClickListener? =null
-   
-    operator fun invoke (onClickListener: OnClickListener) {
-        this.onClickListener = onClickListener
-    }
-
-    fun execute() {
-        onClickListener?.onItemClick(4)
-    }
-    
-    interface OnClickListener {
-        fun onItemClick(position: Int)
-        fun onRadioButtonClick(position: Int)
-    }
-}
+ abstract class OnClickListener {
+        void onItemClick(int position);
+        void onRadioButtonClick(int position);
+ }
 
 ```
 ### Good
