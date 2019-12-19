@@ -64,61 +64,55 @@
 
 ### Bad
 
-```kotlin
-fun main() {
-    val mileageCalculator = MileageCalculator()
-    mileageCalculator.showMileage(Car())
+```dart
+void main() {
+    MileageCalculator mileageCalculator = new MileageCalculator();
+    mileageCalculator.showMileage(new Bike());
 }
 
 class MileageCalculator {
-
-    fun showMileage(anyView: Any) {
-        when {
-            anyView is Bike -> {
-                print(anyView.getBikeMileage())
-            }
-            anyView is Car -> {
-                print(anyView.getCarMileage())
-            }
-        }
+    void showMileage(dynamic anyVehicle) {
+      if(anyVehicle is Bike) {
+          print(anyVehicle.getBikeMileage());
+      } else if(anyVehicle is Car) {
+          print(anyVehicle.getCarMileage());
+      }
     }
 }
 
-
 class Bike {
-    fun getBikeMileage(): String = "50"
+    String getBikeMileage() => "50";
 }
 
 class Car {
-    fun getCarMileage(): String = "12"
+    String getCarMileage() => "12";
 }
 ```
 
 ### Good
 
-```kotlin
-fun main() {
-    val mileageCalculator = MileageCalculator()
-    mileageCalculator.showMileage(Bike())
+```dart
+void main() {
+    MileageCalculator mileageCalculator = new MileageCalculator();
+    mileageCalculator.showMileage(new Car());
 }
 
 class MileageCalculator {
-
-    fun showMileage(vehicle: Vehicle) {
-        println(vehicle.getMileage())
+    void showMileage(Vehicle vehicle) {
+       print(vehicle.getMileage());
     }
 }
 
-interface Vehicle {
-    fun getMileage(): String
-} 
-
-class Bike: Vehicle {
-    override fun getMileage(): String = "50"
+class Bike extends Vehicle {
+    String getMileage() => "50";
 }
 
-class Car: Vehicle {
-    override fun getMileage(): String = "12"
+class Car extends Vehicle {
+    String getMileage() => "12";
+}
+
+abstract class Vehicle {
+  String getMileage();
 }
 ```
 
