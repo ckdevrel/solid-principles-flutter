@@ -210,69 +210,40 @@ class RadioButtonWidget implements ClickListener {
 ## I — The Interface Segregation Principle (ISP):
 
 ### Bad
-```dart
- void main()  {
-    var adapter = new ListItemWidget();
-    adapter.click();
- }
-       
 
-class ListItemWidget implements OnClickListener {
-
-   void click () {}
-  
+```dart 
+class ImageViewWidget with OnClickListener {
    @override 
-   void onItemClick(position: Int) {
+   void onImageClick(int position) {
         // Yes, I have received a callback, go to the next activity.
         print("Clicked position is $position");
    }
    @override 
-   void onRadioButtonClick(position: Int) {
+   void onRadioButtonClick(int position) {
         // This is no longer needed for this activity, but still I have been implemented for no use...
    }
 }
 
- abstract class OnClickListener {
-        void onItemClick(int position);
-        void onRadioButtonClick(int position);
+ mixin OnClickListener {
+    void onImageClick(int position);
+    void onRadioButtonClick(int position);
  }
-
 ```
+
 ### Good
 
-```kotlin
-fun main() {
-    val adapter = Adapter()
-    adapter(object: Adapter.OnItemClickListener {
-        override fun onItemClick(position: Int) {
-            // Yes, I have received a callback, go to the next activity.
-            println("Clicked position is $position")
-        }
-    })
-    adapter.execute()
+```dart
+class ImageViewWidget with OnImageClickListener {
+   @override 
+   void onImageClick(int position) {
+        // Yes, I have received a callback, go to the next activity.
+        print("Clicked position is $position");
+   }
 }
 
-class Adapter {
-
-    private var onItemClickListener: OnItemClickListener? =null
-   
-    operator fun invoke (onItemClickListener: OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    fun execute() {
-        onItemClickListener?.onItemClick(4)
-    }
-    
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-    
-    interface OnRadioClickListener {
-        fun onRadioButtonClick(position: Int)
-    }
-
-}
+ mixin OnImageClickListener {
+    void onImageClick(int position);
+ }
 ```
 
 ## D - The Dependency Inversion Principle (DIP)
