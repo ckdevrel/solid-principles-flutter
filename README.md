@@ -119,93 +119,91 @@ abstract class Vehicle {
 ## L - The Liskov Substitution Principle (LSP)
 
 ### Bad
-```kotlin
-fun main() {
-    val adapter = Adapter()
-    adapter.select(RadioButton())
+
+```dart
+void main() {
+    StatelessWidget adapter = new StatelessWidget();
+    adapter.select(new RadioButtonWidget());
 }
 
-class Adapter {
-
-    fun select(clickListener: ClickListener) {
-        when {
-           clickListener is ListItem -> {
-               clickListener.changeTheBackground()
-           }
-           
-           clickListener is RadioButton -> {
-               clickListener.check()
-           }
+class StatelessWidget {
+    void select(ClickListener clickListener) {
+        if (clickListener is ListItemWidget) { 
+            clickListener.changeTheBackground();
+        } else if (clickListener is RadioButtonWidget) {
+            clickListener.check();
         }
-        clickListener.onClick(1)
+        clickListener.onClick(1);
     }
 }
 
-interface ClickListener {
-    fun onClick(position: Int)
+mixin ClickListener {
+    void onClick(int position);
 } 
 
-class ListItem: ClickListener {
-    override fun onClick(position: Int){
-       println("Clicked ListItem $position")
+class ListItemWidget implements ClickListener {
+    @override 
+    void onClick(int position){
+       print("Clicked list item $position");
     }
     
-    fun changeTheBackground() {
-       println("Change the background color of the item view")
+    void changeTheBackground() {
+       print("Change the background color of the item view");
     }
     
 }
 
-class RadioButton: ClickListener {
-    override fun onClick(position: Int){
-       println("Clicked RadioButton $position")
+class RadioButtonWidget implements ClickListener {
+    @override 
+    void onClick(int position){
+       print("Clicked radio button $position");
     }
     
-    fun check() {
-       println("Enable the radio button")
+    void check() {
+       print("Enable the radio button");
     }
 }
 ```
 
 ### Good
 
-```kotlin
-fun main() {
-    val adapter = Adapter()
-    adapter.select(RadioButton())
+```dart
+void main() {
+    StatelessWidget adapter = new StatelessWidget();
+    adapter.select(new RadioButtonWidget());
 }
 
-class Adapter {
-
-    fun select(clickListener: ClickListener) {
-        clickListener.onClick(1)
+class StatelessWidget {
+    void select(ClickListener clickListener) {
+        clickListener.onClick(1);
     }
 }
 
-interface ClickListener {
-    fun onClick(position: Int)
+mixin ClickListener {
+    void onClick(int position);
 } 
 
-class ListItem: ClickListener {
-    override fun onClick(position: Int){
-       changeTheBackground()
-       println("Clicked ListItem $position")
+class ListItemWidget implements ClickListener {
+    @override 
+    void onClick(int position){
+        print("Clicked list item $position");
+       _changeTheBackground();
     }
     
-    fun changeTheBackground() {
-       println("Change the background color of the item view")
+    void _changeTheBackground() {
+       print("Change the background color of the item view");
     }
-    
 }
 
-class RadioButton: ClickListener {
-    override fun onClick(position: Int){
-       check()
-       println("Clicked RadioButton $position")
+class RadioButtonWidget implements ClickListener {
+    @override 
+    void onClick(int position){
+       print("Clicked radio button $position");
+      _check();
     }
     
-    fun check() {
-       println("Enable the radio button")
+    void _check() {
+       print("Enable the radio button");
     }
 }
 ```
