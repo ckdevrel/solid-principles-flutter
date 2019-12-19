@@ -244,6 +244,10 @@ class ImageViewWidget with OnImageClickListener {
  mixin OnImageClickListener {
     void onImageClick(int position);
  }
+ 
+ mixin OnRadioButtonClickListener {
+    void onRadioButtonClick(int position);
+ }
 ```
 
 ## D - The Dependency Inversion Principle (DIP)
