@@ -249,72 +249,48 @@ class ImageViewWidget with OnImageClickListener {
 ## D - The Dependency Inversion Principle (DIP)
 
 ### Bad
-```kotlin
-fun main() {
-    val user = User()
-    user.getMyData(3)
-}
+```dart
 
-class User {
-
-    fun getMyData(requestCode: Int) {
-        when (requestCode) {
-            1 -> {
-                val firebase = Firebase()
-                firebase.fetchData() 
-            }
-            2 -> {
-                val restClient = RestClient()
-                restClient.fetchData() 
-            } 
-            else -> print("I dont care about the user. Don't do anything. Keep quiet!")
-        } 
-
-    }
-}
-
-class Firebase {
-    fun fetchData(){
-        print("Syncing the data from the firebase storage")
-    } 
-}
-
-class RestClient {
-    fun fetchData(){ 
-        print("Hitting the api and getting back the response")
-    } 
+class RepositoryImpl {
+  List<FeedItem> getDataFromApi() {
+    // do your api call
+  }
+  
+  List<FeedItem> getDataFromCache() {
+    // get the data from the database
+  }
 }
 ```
+
 ### Good
-```kotlin
-fun main() {
-    /* As a end user, I don't care about how will I retrieve the data. 
-     * Do whatever you want and simply get my data. 
-     */
-    val user = User(dataFetcher = Firebase())
-    user.getMyData()
+```dart
+class RepositoryImpl {
+  
+  RemoteDataSource remoteDataSource;
+  LocalDataSource locaDataSource;
+  
+  RepositoryImpl(this.remoteDataSource, this.locaDataSource);
 }
 
-class User(private val dataFetcher: DataFetcher) {
-
-    fun getMyData() {
-        dataFetcher.fetchData()
-    }
+abstract class RemoteDataSource {
+  List<FeedItem> getDataFromApi();
 }
 
-interface DataFetcher {
-    fun fetchData()
+abstract class LocalDataSource {
+  List<FeedItem> getDataFromCache();
 }
 
-class Firebase: DataFetcher {
-    override fun fetchData(){
-       print("Syncing the data from the firebase storage")
-    } 
+class RemoteDataSourceImpl extends RemoteDataSource{
+  // Lets assume this class has an access to http client
+  List<FeedItem> getDataFromApi(){
+        // do your api call
+  }
 }
 
-class RestClient: DataFetcher {
-    override fun fetchData(){ 
-       print("Hitting the api and getting back the response")
-    } 
+class LocalDataSourceImpl extends LocalDataSource {
+    // Lets assume this class has an access to database instance
+  List<FeedItem> getDataFromCache(){
+        // get the data from the database
+  }
 }
 ```
